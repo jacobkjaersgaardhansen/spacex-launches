@@ -156,15 +156,18 @@
             (async () => {
                 const snapshots = await d3.json("http://spacex-launches.com/snapshots.json");
                 const launches = await d3.json("http://spacex-launches.com/launches.json");
+                
                 for (let i=0;i<snapshots.length;i++){
                     snapshots[i] = new Date(snapshots[i]);
-                    
+                    console.log(snapshots[i]);
                 }
+
                 for (let i=0;i<launches.length;i++){
                     for (let j=0;j<launches.date.length;j++){
                         launches[i]["date"][j] = new Date(launches[i]["date"][j]);
+                        console.log(launches[i].name);
+                        console.log(launches[i]["date"][j]);
                     }
-                    
                 }
 
                 d3.select("#time")
