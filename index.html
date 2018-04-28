@@ -38,12 +38,9 @@
         </form>
         <script src = "https://d3js.org/d3.v5.min.js"></script>
         <script>
-            let snapshots;
-            let launches;
-
             (async () => {
-            snapshots = await d3.json("http://spacex-launches.com/snapshots.json");
-            launches = await d3.json("http://spacex-launches.com/launches.json");
+            const snapshots = await d3.json("http://spacex-launches.com/snapshots.json");
+            const launches = await d3.json("http://spacex-launches.com/launches.json");
             
 
             const width = 900;
