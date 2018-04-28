@@ -102,10 +102,8 @@
                 }
             }
             
-            async function loadData()
-            {   
-                const snapshots = await d3.json("snapshots.json");
-                const launches = await d3.json("launches.json");
+            d3.json("snapshots.json").then(function(snapshots){
+                d3.json("launches.json").then(function(launches){
                 
                 d3.select("#time")
                     .attr("min", 0)
@@ -226,8 +224,9 @@
                     textEnter.attr("transform", d => "translate(" + cx(d.date[t]) + "," + cy(d.uncertainty[t]) + ") rotate(" + textRotation + ")");
                     line.attr("x1", cx(snapshots[t])).attr("x2", cx(snapshots[t]));
                 }
-            }
-            loadData();
+            });
+            });
+            
 
         </script>
 	</body>
