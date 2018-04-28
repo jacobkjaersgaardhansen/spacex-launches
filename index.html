@@ -102,49 +102,8 @@
                 }
             }
                         
-            const snapshots = [new Date("2018-01-10"), new Date().setMilliseconds(0)];
-            const launches = [
-                {
-                    name: "Launch A", 
-                    uncertainty: [50,20], // 0 = certain, 100 = very uncertain
-                    date: [new Date("2014-01-01"), new Date("2014-05-01")],
-                    state: [0,1],
-                    site: [0,3],
-                    vehicle: [0,1],
-                    landing: [0,5],
-                    exist: [1,1]
-                },
-                {
-                    name: "Launch B", 
-                    uncertainty: [100,30], 
-                    date: [new Date("2016-01-01"), new Date("2017-05-01")],
-                    state: [0,0],
-                    site: [0,3],
-                    vehicle: [3,3],
-                    landing: [1,1],
-                    exist: [1,1]
-                },
-                {
-                    name: "Launch C", 
-                    uncertainty: [40,40], 
-                    date: [new Date("2019-01-01"), new Date("2019-01-01")],
-                    state: [0,0],
-                    site: [0,1],
-                    vehicle: [0,2],
-                    landing: [0,6],
-                    exist: [0,1]
-                    },
-                {
-                    name: "Launch D", 
-                    uncertainty: [10,5], 
-                    date: [new Date("2018-02-01"), new Date("2019-05-01")],
-                    state: [1,1],
-                    site: [2,2],
-                    vehicle: [0,4],
-                    landing: [0,3],
-                    exist: [1,1]
-                }
-            ];
+            const snapshots = await d3.json("snapshots.json");
+            const launches = await d3.json("launches.json");
             
             d3.select("#time")
                 .attr("min", 0)
