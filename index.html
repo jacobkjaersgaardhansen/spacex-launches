@@ -101,7 +101,7 @@
                     default: return "black";        // data error
                 }
             }
-            d3.json("launches.json", function(launches){console.log(launches[0])});
+            d3.json("https://github.com/jacobkjaersgaardhansen/spacex-launches/blob/master/launches.json", function(launches){console.log(launches[0])});
             /*
             const snapshots = [new Date("2018-01-10"), new Date().setMilliseconds(0)];
             const launches = [
