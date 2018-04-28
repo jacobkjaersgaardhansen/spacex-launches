@@ -149,7 +149,7 @@
                 
                 contUpdate();
 
-                function contUpdate(){
+                async function contUpdate(){
                     snapshots[snapshots.length-1] = new Date().setMilliseconds(0);
                     line
                         .attr("x1", cx(snapshots[t]))
@@ -159,7 +159,7 @@
                 
                 updateCircles(); 
 
-                function updateCircles()
+                async function updateCircles()
                 {
                     t = slider.value;
                     p = d3.select('input[name="palette"]:checked').node().value;
@@ -217,7 +217,7 @@
                 
                 svg.call(zoom);
 
-                function zoomed() {
+                async function zoomed() {
                     cx.range([margin.left, width - margin.right].map(d => d3.event.transform.applyX(d)));
                     gX.call(xAxis.scale(d3.event.transform.rescaleX(originalcx)));
                     circleEnter.attr("cx", d => cx(d.date[t]));
