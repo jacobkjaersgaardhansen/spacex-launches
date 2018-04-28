@@ -44,7 +44,7 @@
             (async () => {
             snapshots = await d3.json("http://spacex-launches.com/snapshots.json");
             launches = await d3.json("http://spacex-launches.com/launches.json");
-            })();
+            
 
             const width = 900;
             const height = 350;
@@ -279,7 +279,7 @@
                     textEnter.attr("transform", d => "translate(" + cx(d.date[t]) + "," + cy(d.uncertainty[t]) + ") rotate(" + textRotation + ")");
                     line.attr("x1", cx(snapshots[t])).attr("x2", cx(snapshots[t]));
                 }
-            
+            })();
 
         </script>
 	</body>
