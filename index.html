@@ -101,138 +101,135 @@
                     default: return "black";        // data error
                 }
             }
-            
-            let snapshots;
-            let launches;
-	d3.json("launches.json", function(error, data){
+
+            d3.json("snapshots.json", function(error, snapshots){
                 if (error) throw error;
-                launches = data;
-            });
-
-            d3.json("snapshots.json", function(error, data){
-                if (error) throw error;
-                snapshots = data;
-            });
             
-            d3.select("#time")
-                .attr("min", 0)
-                .attr("max", snapshots.length-1)
-                .attr("step", 1)
-                .attr("value", snapshots.length-1);
-
-            const slider = document.getElementById("time");
-            slider.addEventListener("change", updateCircles);
-            let t = slider.value;
-
-            const radiobuttons = document.getElementById("palette");
-            radiobuttons.addEventListener("change",updateCircles);
-            let p = d3.select('input[name="palette"]:checked').node().value;
-
-            var svg = d3.select("svg")
-                .attr("width",width)
-                .attr("height",height);
-
-            var circle = svg.selectAll("circle")
-                .data(launches);
-            var circleEnter = circle.enter().append("circle")
-                .attr("r", 0)
-                .attr("cx", d => cx(d.date[t]))
-                .attr("cy", d => cy(d.uncertainty[t]));
-
-            var text = svg.selectAll("text")
-                .data(launches);
-            var textEnter = text.enter().append("text")
-                .attr("class", "names")
-                .attr("text-anchor", "start")
-                .attr("transform", d => "translate(" + cx(d.date[t]) + "," + cy(d.uncertainty[t]) + ") rotate(" + textRotation + ")")
-                .text(d => d.name);
+                d3.json("launches.json", function(error, launches){
+                    if (error) throw error;
                 
-            
-            var line = svg.append("line")
-                .attr("x1", cx(snapshots[t]))
-                .attr("y1", margin.top)
-                .attr("x2", cx(snapshots[t]))
-                .attr("y2", height - margin.bottom)
-                .style("stroke-width", 2)
-                .style("stroke", "#bbb");
-            
-            contUpdate();
+                d3.select("#time")
+                    .attr("min", 0)
+                    .attr("max", snapshots.length-1)
+                    .attr("step", 1)
+                    .attr("value", snapshots.length-1);
 
-            function contUpdate(){
-                snapshots[snapshots.length-1] = new Date().setMilliseconds(0);
-                line
-                    .attr("x1", cx(snapshots[t]))
-                    .attr("x2", cx(snapshots[t]));
-                setTimeout(contUpdate, 1000);
-            }
-            
-            updateCircles(); 
+                const slider = document.getElementById("time");
+                slider.addEventListener("change", updateCircles);
+                let t = slider.value;
 
-            function updateCircles()
-            {
-                t = slider.value;
-                p = d3.select('input[name="palette"]:checked').node().value;
-                circleEnter
-                    .transition()
-                    .duration(750)
-                    .attr("r", d => d.exist[t] == 1? 10: 0)
-                    .attr("stroke-width", d => d.exist[t] == 1? 3: 0)
+                const radiobuttons = document.getElementById("palette");
+                radiobuttons.addEventListener("change",updateCircles);
+                let p = d3.select('input[name="palette"]:checked').node().value;
+
+                var svg = d3.select("svg")
+                    .attr("width",width)
+                    .attr("height",height);
+
+                var circle = svg.selectAll("circle")
+                    .data(launches);
+                var circleEnter = circle.enter().append("circle")
+                    .attr("r", 0)
                     .attr("cx", d => cx(d.date[t]))
-                    .attr("cy", d => cy(d.uncertainty[t]))
-                    .attr("fill", d => 
-                        p == 0? state(d.state[t]):
-                        p == 1? site(d.site[t]): 
-                        p == 2? vehicle(d.vehicle[t]):
-                        p == 3? landing(d.landing[t]): 
-                        "black" // error in palette selection
-                        )
-                    .attr("stroke", d => 
-                        p == 0? state(d.state[t]):
-                        p == 1? site(d.site[t]): 
-                        p == 2? vehicle(d.vehicle[t]):
-                        p == 3? landing(d.landing[t]): 
-                        "black" // error in palette selection
-                        );
-                
-                textEnter
-                    .transition()
-                    .duration(750)
-                    .attr("font-size", d => d.exist[t] == 1? 12: 0)
+                    .attr("cy", d => cy(d.uncertainty[t]));
+
+                var text = svg.selectAll("text")
+                    .data(launches);
+                var textEnter = text.enter().append("text")
+                    .attr("class", "names")
+                    .attr("text-anchor", "start")
                     .attr("transform", d => "translate(" + cx(d.date[t]) + "," + cy(d.uncertainty[t]) + ") rotate(" + textRotation + ")")
-                    .attr("dx", 15)
-                    .attr("dy", d => d.exist[t] == 1? 5: 0);
+                    .text(d => d.name);
+                    
                 
-                line
-                    .transition()
-                    .duration(250)
+                var line = svg.append("line")
                     .attr("x1", cx(snapshots[t]))
-                    .attr("x2", cx(snapshots[t]));
-            };
-        
+                    .attr("y1", margin.top)
+                    .attr("x2", cx(snapshots[t]))
+                    .attr("y2", height - margin.bottom)
+                    .style("stroke-width", 2)
+                    .style("stroke", "#bbb");
+                
+                contUpdate();
 
-            var zoom = d3.zoom()
-                .scaleExtent([1, 20000000])
-                .translateExtent(extent)
-                .extent(extent)
-                .on("zoom", zoomed);
-    
-            var xAxis = d3.axisBottom(cx)
-               .tickSize(5)
-               .tickPadding(5);
-
-            var gX = svg.append("g")
-                .attr("transform", `translate(0,${height - margin.bottom})`)
-                .call(xAxis);
-            
-            svg.call(zoom);
-
-            function zoomed() {
-                cx.range([margin.left, width - margin.right].map(d => d3.event.transform.applyX(d)));
-                gX.call(xAxis.scale(d3.event.transform.rescaleX(originalcx)));
-                circleEnter.attr("cx", d => cx(d.date[t]));
-                textEnter.attr("transform", d => "translate(" + cx(d.date[t]) + "," + cy(d.uncertainty[t]) + ") rotate(" + textRotation + ")");
-                line.attr("x1", cx(snapshots[t])).attr("x2", cx(snapshots[t]));
+                function contUpdate(){
+                    snapshots[snapshots.length-1] = new Date().setMilliseconds(0);
+                    line
+                        .attr("x1", cx(snapshots[t]))
+                        .attr("x2", cx(snapshots[t]));
+                    setTimeout(contUpdate, 1000);
                 }
+                
+                updateCircles(); 
+
+                function updateCircles()
+                {
+                    t = slider.value;
+                    p = d3.select('input[name="palette"]:checked').node().value;
+                    circleEnter
+                        .transition()
+                        .duration(750)
+                        .attr("r", d => d.exist[t] == 1? 10: 0)
+                        .attr("stroke-width", d => d.exist[t] == 1? 3: 0)
+                        .attr("cx", d => cx(d.date[t]))
+                        .attr("cy", d => cy(d.uncertainty[t]))
+                        .attr("fill", d => 
+                            p == 0? state(d.state[t]):
+                            p == 1? site(d.site[t]): 
+                            p == 2? vehicle(d.vehicle[t]):
+                            p == 3? landing(d.landing[t]): 
+                            "black" // error in palette selection
+                            )
+                        .attr("stroke", d => 
+                            p == 0? state(d.state[t]):
+                            p == 1? site(d.site[t]): 
+                            p == 2? vehicle(d.vehicle[t]):
+                            p == 3? landing(d.landing[t]): 
+                            "black" // error in palette selection
+                            );
+                    
+                    textEnter
+                        .transition()
+                        .duration(750)
+                        .attr("font-size", d => d.exist[t] == 1? 12: 0)
+                        .attr("transform", d => "translate(" + cx(d.date[t]) + "," + cy(d.uncertainty[t]) + ") rotate(" + textRotation + ")")
+                        .attr("dx", 15)
+                        .attr("dy", d => d.exist[t] == 1? 5: 0);
+                    
+                    line
+                        .transition()
+                        .duration(250)
+                        .attr("x1", cx(snapshots[t]))
+                        .attr("x2", cx(snapshots[t]));
+                };
+            
+
+                var zoom = d3.zoom()
+                    .scaleExtent([1, 20000000])
+                    .translateExtent(extent)
+                    .extent(extent)
+                    .on("zoom", zoomed);
+        
+                var xAxis = d3.axisBottom(cx)
+                .tickSize(5)
+                .tickPadding(5);
+
+                var gX = svg.append("g")
+                    .attr("transform", `translate(0,${height - margin.bottom})`)
+                    .call(xAxis);
+                
+                svg.call(zoom);
+
+                function zoomed() {
+                    cx.range([margin.left, width - margin.right].map(d => d3.event.transform.applyX(d)));
+                    gX.call(xAxis.scale(d3.event.transform.rescaleX(originalcx)));
+                    circleEnter.attr("cx", d => cx(d.date[t]));
+                    textEnter.attr("transform", d => "translate(" + cx(d.date[t]) + "," + cy(d.uncertainty[t]) + ") rotate(" + textRotation + ")");
+                    line.attr("x1", cx(snapshots[t])).attr("x2", cx(snapshots[t]));
+                    }
+            
+                });
+            });
 
         </script>
 	</body>
