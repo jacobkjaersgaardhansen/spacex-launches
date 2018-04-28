@@ -1,4 +1,4 @@
-const launches = [
+[
     {
         "name": "Launch A", 
         "uncertainty": [50,20],
@@ -39,4 +39,4 @@ const launches = [
         "landing": [0,3],
         "exist": [1,1]
     }
-];
+]
