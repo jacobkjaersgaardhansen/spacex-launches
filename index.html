@@ -163,7 +163,7 @@
                 }
 
                 for (let i=0;i<launches.length;i++){
-                    for (let j=0;j<launches.date.length;j++){
+                    for (let j=0;j<launches[i].date.length;j++){
                         launches[i]["date"][j] = new Date(launches[i]["date"][j]);
                         console.log(launches[i].name);
                         console.log(launches[i]["date"][j]);
