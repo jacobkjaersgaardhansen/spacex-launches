@@ -36,7 +36,7 @@
             <input type="radio" name="palette" value="2">Vehicles
             <input type="radio" name="palette" value="3">Booster landings
         </form>
-        <script src = "https://d3js.org/d3.v5.min.js"></script>
+        <script src = "https://d3js.org/d3.v4.min.js"></script>
         <script>
             const width = 900;
             const height = 350;
@@ -102,8 +102,10 @@
                 }
             }
             
-            d3.json("snapshots.json").then(function(snapshots){
-                d3.json("launches.json").then(function(launches){
+            d3.json("snapshots.json", function(error, snapshots){
+                if (error) throw error;
+                d3.json("launches.json", function(error, launches){
+                    if (error) throw error;
                 
                 d3.select("#time")
                     .attr("min", 0)
@@ -149,7 +151,7 @@
                 
                 contUpdate();
 
-                async function contUpdate(){
+                function contUpdate(){
                     snapshots[snapshots.length-1] = new Date().setMilliseconds(0);
                     line
                         .attr("x1", cx(snapshots[t]))
@@ -159,7 +161,7 @@
                 
                 updateCircles(); 
 
-                async function updateCircles()
+                function updateCircles()
                 {
                     t = slider.value;
                     p = d3.select('input[name="palette"]:checked').node().value;
@@ -217,7 +219,7 @@
                 
                 svg.call(zoom);
 
-                async function zoomed() {
+                function zoomed() {
                     cx.range([margin.left, width - margin.right].map(d => d3.event.transform.applyX(d)));
                     gX.call(xAxis.scale(d3.event.transform.rescaleX(originalcx)));
                     circleEnter.attr("cx", d => cx(d.date[t]));
