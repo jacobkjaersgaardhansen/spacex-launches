@@ -38,8 +38,8 @@
         </form>
         <script src = "https://d3js.org/d3.v5.min.js"></script>
         <script>
-            const width = 900;
-            const height = 350;
+            const width = d3.select("body").node().getBoundingClientRect().width; //900
+            const height = d3.min([d3.select("body").node().getBoundingClientRect().height,2/3*width]); //350
             const textRotation = -40;
 
             const margin = ({top: 20, right: 20, bottom: 30, left: 20});
