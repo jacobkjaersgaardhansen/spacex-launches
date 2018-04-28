@@ -37,8 +37,8 @@
             <input type="radio" name="palette" value="3">Booster landings
         </form>
         <script src = "https://d3js.org/d3.v5.min.js"></script>
-        <script src = "http://spacex-launches.com/snapshots.js"></script>
-        <script src = "http://spacex-launches.com/launches.js"></script>
+       <!-- <script src = "http://spacex-launches.com/snapshots.js"></script>
+       <script src = "http://spacex-launches.com/launches.js"></script>-->
         <script>
             const width = 900;
             const height = 350;
@@ -103,7 +103,62 @@
                     default: return "black";        // data error
                 }
             }
+/*
+            const snapshots = [
+                new Date("2018-01-10T00:00:00Z"), 
+                new Date("2018-01-01T00:00:00Z")
+                ];
+*/
             
+            const launches = [
+                {
+                    "name": "Launch A", 
+                    "uncertainty": [50,20],
+                    "date": [new Date("2014-01-01T00:00:00Z"), new Date("2014-05-01T00:00:00Z")],
+                    "state": [0,1],
+                    "site": [0,3],
+                    "vehicle": [0,1],
+                    "landing": [0,5],
+                    "exist": [1,1]
+                },
+                {
+                    "name": "Launch B", 
+                    "uncertainty": [100,30], 
+                    "date": [new Date("2016-01-01T00:00:00Z"), new Date("2017-05-01T00:00:00Z")],
+                    "state": [0,0],
+                    "site": [0,3],
+                    "vehicle": [3,3],
+                    "landing": [1,1],
+                    "exist": [1,1]
+                },
+                {
+                    "name": "Launch C", 
+                    "uncertainty": [40,40], 
+                    "date": [new Date("2019-01-01T00:00:00Z"), new Date("2019-01-01T00:00:00Z")],
+                    "state": [0,0],
+                    "site": [0,1],
+                    "vehicle": [0,2],
+                    "landing": [0,6],
+                    "exist": [0,1]
+                    },
+                {
+                    "name": "Launch D", 
+                    "uncertainty": [10,5], 
+                    "date": [new Date("2018-02-01T00:00:00Z"), new Date("2019-05-01T00:00:00Z")],
+                    "state": [1,1],
+                    "site": [2,2],
+                    "vehicle": [0,4],
+                    "landing": [0,3],
+                    "exist": [1,1]
+                }
+            ];
+
+            (async () => {
+            const snapshots = await d3.json("http://spacex-launches.com/snapshots.json");
+            for (let i=0;i<snapshots.length;i++){
+                snapshots[i] = new Date(snapshots[i]);
+            }
+
             d3.select("#time")
                 .attr("min", 0)
                 .attr("max", snapshots.length-1)
@@ -223,6 +278,7 @@
                 textEnter.attr("transform", d => "translate(" + cx(d.date[t]) + "," + cy(d.uncertainty[t]) + ") rotate(" + textRotation + ")");
                 line.attr("x1", cx(snapshots[t])).attr("x2", cx(snapshots[t]));
             }
+            })();
 
         </script>
 	</body>
