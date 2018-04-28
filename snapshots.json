@@ -1,0 +1,4 @@
+[
+new Date("2018-01-10"), 
+new Date().setMilliseconds(0)
+]
