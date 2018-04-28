@@ -37,8 +37,6 @@
             <input type="radio" name="palette" value="3">Booster landings
         </form>
         <script src = "https://d3js.org/d3.v5.min.js"></script>
-       <!-- <script src = "http://spacex-launches.com/snapshots.js"></script>
-       <script src = "http://spacex-launches.com/launches.js"></script>-->
         <script>
             const width = 900;
             const height = 350;
@@ -46,7 +44,11 @@
 
             const margin = ({top: 20, right: 20, bottom: 30, left: 20});
             const extent = [[margin.left, margin.top], [width - margin.right, height - margin.top]];
-
+            
+            const svg = d3.select("svg")
+                .attr("width",width)
+                .attr("height",height);
+                
             const cx = d3.scaleTime()
                 .domain([new Date("January 1, 2010 00:00:00"), new Date("January 2, 2020 00:00:00")]) //domain: use d3.max
                 .range([margin.left, width - margin.right]);
@@ -131,10 +133,6 @@
                 const radiobuttons = document.getElementById("palette");
                 radiobuttons.addEventListener("change",updateCircles);
                 let p = d3.select('input[name="palette"]:checked').node().value;
-
-                var svg = d3.select("svg")
-                    .attr("width",width)
-                    .attr("height",height);
 
                 var circle = svg.selectAll("circle")
                     .data(launches);
