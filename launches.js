@@ -39,4 +39,4 @@ const launches = [
         "landing": [0,3],
         "exist": [1,1]
     }
-]
+];
