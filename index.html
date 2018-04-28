@@ -102,7 +102,6 @@
                 }
             }
             
-            loadData();
             async function loadData()
             {   
                 const snapshots = await d3.json("snapshots.json");
@@ -201,7 +200,7 @@
                         .duration(250)
                         .attr("x1", cx(snapshots[t]))
                         .attr("x2", cx(snapshots[t]));
-                };
+                }
             
 
                 var zoom = d3.zoom()
@@ -226,8 +225,9 @@
                     circleEnter.attr("cx", d => cx(d.date[t]));
                     textEnter.attr("transform", d => "translate(" + cx(d.date[t]) + "," + cy(d.uncertainty[t]) + ") rotate(" + textRotation + ")");
                     line.attr("x1", cx(snapshots[t])).attr("x2", cx(snapshots[t]));
-                };
-            };
+                }
+            }
+            loadData();
 
         </script>
 	</body>
