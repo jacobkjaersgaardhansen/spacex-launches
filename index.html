@@ -48,7 +48,7 @@
             const svg = d3.select("svg")
                 .attr("width",width)
                 .attr("height",height);
-                
+
             const cx = d3.scaleTime()
                 .domain([new Date("January 1, 2010 00:00:00"), new Date("January 2, 2020 00:00:00")]) //domain: use d3.max
                 .range([margin.left, width - margin.right]);
@@ -107,8 +107,8 @@
             }
 
             (async () => {
-                const snapshots = await d3.json("http://spacex-launches.com/snapshots.json");
-                const launches = await d3.json("http://spacex-launches.com/launches.json");
+                const snapshots = await d3.json("snapshots.json");
+                const launches = await d3.json("launches.json");
                 
                 for (let i=0;i<snapshots.length;i++){
                     snapshots[i] = new Date(snapshots[i]);
@@ -211,7 +211,6 @@
                         .attr("x2", cx(snapshots[t]));
                 }
             
-
                 var zoom = d3.zoom()
                     .scaleExtent([1, 20000000])
                     .translateExtent(extent)
