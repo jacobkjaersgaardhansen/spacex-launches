@@ -102,8 +102,8 @@
                 }
             }
                         
-            const snapshots = await d3.json("snapshots.json");
-            const launches = await d3.json("launches.json");
+            snapshots = await d3.json("snapshots.json");
+            launches = await d3.json("launches.json");
             
             d3.select("#time")
                 .attr("min", 0)
