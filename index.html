@@ -36,12 +36,12 @@
             <input type="radio" name="palette" value="2">Vehicles
             <input type="radio" name="palette" value="3">Booster landings
         </form>
-        <script src = "https://d3js.org/d3.v4.min.js"></script>
+        <script src = "https://d3js.org/d3.v5.min.js"></script>
         <script>
-            d3.json("snapshots.json", function(error, snapshots){
-                if (error) throw error;
-                d3.json("launches.json", function(error, launches){
-                    if (error) throw error;
+            (async () => {
+            const snapshots = await d3.json("http://spacex-launches.com/snapshots.json");
+            const launches = await d3.json("http://spacex-launches.com/launches.json");
+            })();
 
             const width = 900;
             const height = 350;
@@ -276,8 +276,6 @@
                     textEnter.attr("transform", d => "translate(" + cx(d.date[t]) + "," + cy(d.uncertainty[t]) + ") rotate(" + textRotation + ")");
                     line.attr("x1", cx(snapshots[t])).attr("x2", cx(snapshots[t]));
                 }
-            });
-            });
             
 
         </script>
