@@ -1,4 +1,4 @@
-[
+const launches = [
     {
         "name": "Launch A", 
         "uncertainty": [50,20],
