@@ -101,7 +101,8 @@
                     default: return "black";        // data error
                 }
             }
-
+            d3.json("/launches.json", function(launches){console.log(launches[0])});
+            /*
             const snapshots = [new Date("2018-01-10"), new Date().setMilliseconds(0)];
             const launches = [
                 {
@@ -145,7 +146,7 @@
                     exist: [1,1]
                 }
             ];
-
+            */
             d3.select("#time")
                 .attr("min", 0)
                 .attr("max", snapshots.length-1)
